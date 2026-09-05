@@ -31,7 +31,52 @@ def test_detect_learning():
     }
 
 
+def test_detect_favorite_language():
+    result = detect_memory(
+        "My favorite language is Python"
+    )
+
+    assert result == {
+        "memory_type": "preference",
+        "memory_key": "favorite_language",
+        "memory_value": "Python",
+    }
+
+
+def test_detect_response_preference():
+    result = detect_memory(
+        "I prefer concise explanations"
+    )
+
+    assert result == {
+        "memory_type": "preference",
+        "memory_key": "response_style",
+        "memory_value": "concise explanations",
+    }
+
+
 def test_ignore_normal_message():
-    result = detect_memory("What is machine learning?")
+    result = detect_memory(
+        "What is machine learning?"
+    )
 
     assert result is None
+
+
+def test_ignore_calculation():
+    result = detect_memory(
+        "What is 10 * 5?"
+    )
+
+    assert result is None
+    
+def test_detect_explicit_memory_request():
+    result = detect_memory(
+        "Remember that I prefer concise explanations"
+    )
+
+    assert result == {
+        "memory_type": "preference",
+        "memory_key": "response_style",
+        "memory_value": "concise explanations",
+    }
